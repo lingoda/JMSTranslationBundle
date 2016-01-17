@@ -61,10 +61,33 @@ class MyFormType extends AbstractType
             ->add('field_without_label', 'text', [
                 'label' => false,
                 'attr' => ['placeholder' => /** @Desc("Field with a placeholder but no label") */ 'form.placeholder.text.but.no.label'],
-            ]);
+            ])
+            ->add('field_with_choice_as_values', 'choice', array(
+                'choices' => array(
+                    'form.choice.choice_as_values.label.foo' => 'form.choice.choice_as_values.value.foo',
+                    'form.choice.choice_as_values.label.bar' => 'form.choice.choice_as_values.value.bar'
+                ),
+                'choices_as_values' => true,
+            ))
+        ;
         $child = $builder->create('created', 'text', ['label' => 'form.label.created']);
         $builder->add('dueDate', 'date', [
             'empty_value' => ['year' => 'form.dueDate.empty.year', 'month' => 'form.dueDate.empty.month', 'day' => 'form.dueDate.empty.day'],
         ]);
+
+        $builder
+            ->add('choices_with_translation_domain', 'choice', array(
+                'choices' => array('form.choices_with_translation_domain.label' => 'form.choices_with_translation_domain.value'),
+                'choice_translation_domain' => 'choice-domain'
+            ))
+            ->add('choices_without_translation', 'choice', array(
+                'choices' => array('form.choices_without_translation.label' => 'form.choices_without_translation.value'),
+                'choice_translation_domain' => false,
+            ))
+            ->add('untranslatable_label', 'text', array(
+                'label' => 'form.untranslatable_label.label',
+                'translation_domain' => false,
+            ))
+        ;
     }
 }
