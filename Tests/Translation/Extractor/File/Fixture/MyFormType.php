@@ -82,15 +82,18 @@ class MyFormType extends AbstractType
         $builder
             ->add('choices_with_translation_domain', 'choice', array(
                 'choices' => array('form.choices_with_translation_domain.label' => 'form.choices_with_translation_domain.value'),
-                'choice_translation_domain' => 'choice-domain'
+                'choice_translation_domain' => 'choice-domain',
+                'choices_as_values' => true,
             ))
             ->add('choices_without_translation', 'choice', array(
                 'choices' => array('form.choices_without_translation.label' => 'form.choices_without_translation.value'),
                 'choice_translation_domain' => false,
+                'choices_as_values' => true,
             ))
             ->add('untranslatable_label', 'text', array(
                 'label' => 'form.untranslatable_label.label',
                 'translation_domain' => false,
+                'choices_as_values' => true,
             ))
         ;
     }
