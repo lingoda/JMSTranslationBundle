@@ -156,6 +156,14 @@ class FormExtractorTest extends BasePhpFileExtractorTest
         $message->addSource($fileSourceFactory->create($fixtureSplInfo, 104));
         $expected->add($message);
 
+        $message = new Message('form.choices_with_translation_domain.label', 'choice-domain');
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 84));
+        $expected->add($message);
+
+        $message = new Message('form.custom_domain_field_with_placeholder.attr.placeholder', 'custom_domain_field_with_placeholder');
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 104));
+        $expected->add($message);
+
         $this->assertEquals($expected, $this->extract('MyFormType.php'));
     }
 
