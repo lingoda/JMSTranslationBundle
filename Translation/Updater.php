@@ -188,7 +188,7 @@ class Updater
             }
 
             $this->logger->info(sprintf('Deleting translation file "%s".', $file));
-            if (false === @unlink((string) $file)) {
+            if (false === unlink((string) $file)) {
                 throw new RuntimeException(sprintf('Could not delete the translation file "%s".', $file));
             }
         }
