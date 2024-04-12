@@ -72,80 +72,80 @@ class FormExtractorTest extends BasePhpFileExtractorTest
         $fixtureSplInfo    = new \SplFileInfo(__DIR__ . '/Fixture/MyFormType.php');
 
         $message = new Message('foo');
-        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 35));
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 37));
         $expected->add($message);
 
         $message = new Message('form.states.empty_value');
         $message->setDesc('Please select a state');
-        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 36));
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 38));
         $expected->add($message);
 
         $message = new Message('form.label.lastname');
         $message->setDesc('Lastname');
-        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 33));
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 35));
         $expected->add($message);
 
         $message = new Message('form.label.firstname');
-        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 32));
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 34));
         $expected->add($message);
 
         $message = new Message('form.label.password');
-        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 40));
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 42));
         $expected->add($message);
 
         $message = new Message('form.label.password_repeated');
         $message->setDesc('Repeat password');
-        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 41));
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 43));
         $expected->add($message);
 
         $message = new Message('form.label.street', 'address');
         $message->setDesc('Street');
-        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 45));
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 47));
         $expected->add($message);
 
         $message = new Message('form.street.empty_value', 'validators');
         $message->setDesc('You should fill in the street');
-        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 48));
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 50));
         $expected->add($message);
 
         $message = new Message('form.label.zip', 'address');
         $message->setDesc('ZIP');
-        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 54));
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 57));
         $expected->add($message);
 
         $message = new Message('form.error.password_mismatch', 'validators');
         $message->setDesc('The entered passwords do not match');
-        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 42));
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 44));
         $expected->add($message);
 
         $message = new Message('form.label.created');
-        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 73));
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 76));
         $expected->add($message);
 
         $message = new Message('field.with.placeholder');
-        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 58));
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 61));
         $expected->add($message);
 
         $message = new Message('form.placeholder.text');
         $message->setDesc('Field with a placeholder value');
-        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 59));
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 62));
         $expected->add($message);
 
         $message = new Message('form.placeholder.text.but.no.label');
         $message->setDesc('Field with a placeholder but no label');
-        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 63));
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 66));
         $expected->add($message);
 
         $message = new Message('form.dueDate.empty.year');
-        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 75));
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 79));
         $expected->add($message);
 
         $message = new Message('form.dueDate.empty.month');
-        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 75));
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 80));
         $expected->add($message);
 
         $message = new Message('form.dueDate.empty.day');
-        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 75));
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 81));
         $expected->add($message);
 
         $message = new Message(0);
@@ -153,37 +153,36 @@ class FormExtractorTest extends BasePhpFileExtractorTest
         $expected->add($message);
 
         $message = new Message('form.choices_with_translation_domain.label', 'choice-domain');
-        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 80));
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 87));
         $expected->add($message);
 
         $message = new Message('form.untranslatable_label.label', 'messages');
-        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 88));
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 95));
         $expected->add($message);
 
         $message = new Message('field.with.placeholder.no.translation.domain', 'messages');
-        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 94));
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 100));
         $expected->add($message);
 
         $message = new Message('form.choices_without_translation.label', 'messages');
-        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 84));
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 91));
         $expected->add($message);
 
         $message = new Message('form.placeholder.text.skip', 'messages');
         $message->setDesc('Field with a placeholder value');
-        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 95));
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 101));
         $expected->add($message);
 
-
         $message = new Message('form.custom_domain_field_with_placeholder.attr.placeholder', 'custom_domain_field_with_placeholder');
-        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 100));
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 106));
         $expected->add($message);
 
         $message = new Message('form.choice.choice_as_values.label.foo');
-        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 67));
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 70));
         $expected->add($message);
 
         $message = new Message('form.choice.choice_as_values.label.bar');
-        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 68));
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 71));
         $expected->add($message);
 
         $this->assertEquals($expected, $this->extract('MyFormType.php'));

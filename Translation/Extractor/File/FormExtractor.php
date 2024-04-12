@@ -188,10 +188,6 @@ class FormExtractor implements FileVisitorInterface, LoggerAwareInterface, NodeV
         return $this->getDomainValueForKey('translation_domain', $node);
     }
 
-    /**
-     * @param Node $node
-     * @return null|string
-     */
     public function getChoiceDomain(Node $node)
     {
         return $this->getDomainValueForKey('choice_translation_domain', $node);

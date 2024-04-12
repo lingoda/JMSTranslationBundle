@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * Copyright 2016 Arturs Vonda <open-source@artursvonda.lv>
  *
@@ -28,12 +30,8 @@ use PhpParser\Node;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor;
 use SplFileInfo;
+use Twig\Node\Node as TwigNode;
 
-/**
- * Class ValidationContextExtractor
- *
- * Extracts
- */
 class ValidationContextExtractor implements FileVisitorInterface, NodeVisitor
 {
     /**
@@ -74,11 +72,6 @@ class ValidationContextExtractor implements FileVisitorInterface, NodeVisitor
     private $source;
     private $fileSourceFactory;
 
-    /**
-     * ValidationContextExtractor constructor.
-     *
-     * @param FileSourceFactory $fileSourceFactory
-     */
     public function __construct(FileSourceFactory $fileSourceFactory)
     {
         $this->fileSourceFactory = $fileSourceFactory;
@@ -111,7 +104,7 @@ class ValidationContextExtractor implements FileVisitorInterface, NodeVisitor
     /**
      * {@inheritdoc}
      */
-    public function visitTwigFile(\SplFileInfo $file, MessageCatalogue $catalogue, \Twig\Node\Node $ast)
+    public function visitTwigFile(\SplFileInfo $file, MessageCatalogue $catalogue, TwigNode $ast)
     {
     }
 
@@ -135,7 +128,7 @@ class ValidationContextExtractor implements FileVisitorInterface, NodeVisitor
 
         if ($node instanceof Node\Stmt\Use_) {
             foreach ($node->uses as $use) {
-                $parts = explode('\\', $use->name);
+                $parts = explode('\\', (string) $use->name);
                 $this->aliases[end($parts)] = (string) $use->name;
             }
 
@@ -161,9 +154,6 @@ class ValidationContextExtractor implements FileVisitorInterface, NodeVisitor
         }
     }
 
-    /**
-     * @param Node\Expr\MethodCall $node
-     */
     private function parseMethodCall(Node\Expr\MethodCall $node)
     {
         if (!$this->contextVariable) {
@@ -193,7 +183,7 @@ class ValidationContextExtractor implements FileVisitorInterface, NodeVisitor
                 }
             }
         } elseif ((string) $node->name === 'addViolation') {
-            if ($this->id and $this->source) {
+            if ($this->id && $this->source) {
                 $this->messages[] = [
                     'id' => $this->id,
                     'source' => $this->source,
@@ -245,13 +235,8 @@ class ValidationContextExtractor implements FileVisitorInterface, NodeVisitor
         $this->catalogue->add($message);
     }
 
-    /**
-     * @param $class
-     *
-     * @return string
-     */
-    private function resolveAlias($class)
+    private function resolveAlias(string $class): string
     {
-        return isset($this->aliases[$class]) ? $this->aliases[$class] : $class;
+        return $this->aliases[$class] ?: $class;
     }
 }
