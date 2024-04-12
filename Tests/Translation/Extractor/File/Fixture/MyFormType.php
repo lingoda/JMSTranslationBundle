@@ -127,4 +127,6 @@ class MyFormType extends AbstractType
             'translation_domain' => 'custom_domain_field_with_placeholder',
         ));
     }
+
+    public const CHOICES = ['choices' => [null]];
 }

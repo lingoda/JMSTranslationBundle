@@ -56,13 +56,10 @@ class ResourcesListCommand extends Command
         parent::__construct();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function configure()
+    protected function configure(): void
     {
         $this
-            ->setName('translation:list-resources')
+            ->setName('jms:translation:list-resources')
             ->setDescription('List translation resources available.')
             ->addOption('files', null, InputOption::VALUE_OPTIONAL, 'Display only files');
     }
