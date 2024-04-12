@@ -100,32 +100,6 @@ class MyFormType extends AbstractType
             'attr' => array('placeholder' => 'form.custom_domain_field_with_placeholder.attr.placeholder'),
             'translation_domain' => 'custom_domain_field_with_placeholder',
         ));
-
-        $builder
-            ->add('choices_with_translation_domain', 'choice', array(
-                'choices' => array('form.choices_with_translation_domain.label' => 'form.choices_with_translation_domain.value'),
-                'choice_translation_domain' => 'choice-domain'
-            ))
-            ->add('choices_without_translation', 'choice', array(
-                'choices' => array('form.choices_without_translation.label' => 'form.choices_without_translation.value'),
-                'choice_translation_domain' => false,
-            ))
-            ->add('untranslatable_label', 'text', array(
-                'label' => 'form.untranslatable_label.label',
-                'translation_domain' => false,
-            ))
-        ;
-
-        $builder->add('untranslateable_field_with_placeholder', 'text', array(
-            'label' => 'field.with.placeholder.no.translation.domain',
-            'attr' => array('placeholder' => /** @Desc("Field with a placeholder value") */ 'form.placeholder.text.skip'),
-            'translation_domain' => false,
-        ));
-
-        $builder->add('custom_domain_field_with_placeholder', 'text', array(
-            'attr' => array('placeholder' => 'form.custom_domain_field_with_placeholder.attr.placeholder'),
-            'translation_domain' => 'custom_domain_field_with_placeholder',
-        ));
     }
 
     public const CHOICES = ['choices' => [null]];

@@ -207,7 +207,7 @@ class FormExtractor implements FileVisitorInterface, LoggerAwareInterface, NodeV
             }
 
             if ($key === $item->key->value) {
-                if ($item->value instanceof Node\Expr\ConstFetch && $item->value->name->parts[0] === 'false') {
+                if ($item->value instanceof Node\Expr\ConstFetch && $item->value->name === 'false') {
                     $domain = false;
                     break;
                 }

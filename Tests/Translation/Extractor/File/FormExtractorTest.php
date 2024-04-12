@@ -119,7 +119,7 @@ class FormExtractorTest extends BasePhpFileExtractorTest
         $expected->add($message);
 
         $message = new Message('form.label.created');
-        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 65));
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 73));
         $expected->add($message);
 
         $message = new Message('field.with.placeholder');
@@ -137,15 +137,15 @@ class FormExtractorTest extends BasePhpFileExtractorTest
         $expected->add($message);
 
         $message = new Message('form.dueDate.empty.year');
-        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 67));
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 75));
         $expected->add($message);
 
         $message = new Message('form.dueDate.empty.month');
-        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 67));
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 75));
         $expected->add($message);
 
         $message = new Message('form.dueDate.empty.day');
-        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 67));
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 75));
         $expected->add($message);
 
         $message = new Message(0);
@@ -153,19 +153,37 @@ class FormExtractorTest extends BasePhpFileExtractorTest
         $expected->add($message);
 
         $message = new Message('form.choices_with_translation_domain.label', 'choice-domain');
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 80));
+        $expected->add($message);
+
+        $message = new Message('form.untranslatable_label.label', 'messages');
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 88));
+        $expected->add($message);
+
+        $message = new Message('field.with.placeholder.no.translation.domain', 'messages');
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 94));
+        $expected->add($message);
+
+        $message = new Message('form.choices_without_translation.label', 'messages');
         $message->addSource($fileSourceFactory->create($fixtureSplInfo, 84));
         $expected->add($message);
 
-        $message = new Message('form.custom_domain_field_with_placeholder.attr.placeholder', 'custom_domain_field_with_placeholder');
-        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 104));
+        $message = new Message('form.placeholder.text.skip', 'messages');
+        $message->setDesc('Field with a placeholder value');
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 95));
         $expected->add($message);
 
-        $message = new Message('form.choices_with_translation_domain.label', 'choice-domain');
-        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 84));
-        $expected->add($message);
 
         $message = new Message('form.custom_domain_field_with_placeholder.attr.placeholder', 'custom_domain_field_with_placeholder');
-        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 104));
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 100));
+        $expected->add($message);
+
+        $message = new Message('form.choice.choice_as_values.label.foo');
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 67));
+        $expected->add($message);
+
+        $message = new Message('form.choice.choice_as_values.label.bar');
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 68));
         $expected->add($message);
 
         $this->assertEquals($expected, $this->extract('MyFormType.php'));
