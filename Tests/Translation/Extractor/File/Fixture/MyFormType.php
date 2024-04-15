@@ -26,6 +26,8 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 class MyFormType extends AbstractType
 {
+    public const CHOICES = ['choices' => [null]];
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -46,7 +48,8 @@ class MyFormType extends AbstractType
                 'translation_domain' => 'address',
                 'constraints' => [
                     new NotBlank(['message' => /** @Desc("You should fill in the street") */ 'form.street.empty_value']),
-                    new Length(['max' => 100]), // https://github.com/schmittjoh/JMSTranslationBundle/issues/553
+                    new Length(['max' => 100]),
+                    // https://github.com/schmittjoh/JMSTranslationBundle/issues/553
                 ],
             ])
             ->add('zip', 'text', [
@@ -62,69 +65,46 @@ class MyFormType extends AbstractType
                 'label' => false,
                 'attr' => ['placeholder' => /** @Desc("Field with a placeholder but no label") */ 'form.placeholder.text.but.no.label'],
             ])
-            ->add('field_with_choice_as_values', 'choice', array(
-                'choices' => array(
+            ->add('field_with_choice_as_values', 'choice', [
+                'choices' => [
                     'form.choice.choice_as_values.label.foo' => 'form.choice.choice_as_values.value.foo',
-                    'form.choice.choice_as_values.label.bar' => 'form.choice.choice_as_values.value.bar'
-                ),
+                    'form.choice.choice_as_values.label.bar' => 'form.choice.choice_as_values.value.bar',
+                ],
                 'choices_as_values' => true,
-            ))
-        ;
+            ]);
+
         $child = $builder->create('created', 'text', ['label' => 'form.label.created']);
         $builder->add('dueDate', 'date', [
-            'empty_value' => ['year' => 'form.dueDate.empty.year', 'month' => 'form.dueDate.empty.month', 'day' => 'form.dueDate.empty.day'],
+            'empty_value' => [
+                'year' => 'form.dueDate.empty.year',
+                'month' => 'form.dueDate.empty.month',
+                'day' => 'form.dueDate.empty.day',
+            ],
         ]);
 
         $builder
-            ->add('choices_with_translation_domain', 'choice', array(
-                'choices' => array('form.choices_with_translation_domain.label' => 'form.choices_with_translation_domain.value'),
-                'choice_translation_domain' => 'choice-domain'
-            ))
-            ->add('choices_without_translation', 'choice', array(
-                'choices' => array('form.choices_without_translation.label' => 'form.choices_without_translation.value'),
+            ->add('choices_with_translation_domain', 'choice', [
+                'choices' => ['form.choices_with_translation_domain.label' => 'form.choices_with_translation_domain.value'],
+                'choice_translation_domain' => 'choice-domain',
+            ])
+            ->add('choices_without_translation', 'choice', [
+                'choices' => ['form.choices_without_translation.label' => 'form.choices_without_translation.value'],
                 'choice_translation_domain' => false,
-            ))
-            ->add('untranslatable_label', 'text', array(
+            ])
+            ->add('untranslatable_label', 'text', [
                 'label' => 'form.untranslatable_label.label',
                 'translation_domain' => false,
-            ))
-        ;
+            ]);
 
-        $builder->add('untranslateable_field_with_placeholder', 'text', array(
+        $builder->add('untranslateable_field_with_placeholder', 'text', [
             'label' => 'field.with.placeholder.no.translation.domain',
-            'attr' => array('placeholder' => /** @Desc("Field with a placeholder value") */ 'form.placeholder.text.skip'),
+            'attr' => ['placeholder' => /** @Desc("Field with a placeholder value") */ 'form.placeholder.text.skip'],
             'translation_domain' => false,
-        ));
+        ]);
 
-        $builder->add('custom_domain_field_with_placeholder', 'text', array(
-            'attr' => array('placeholder' => 'form.custom_domain_field_with_placeholder.attr.placeholder'),
+        $builder->add('custom_domain_field_with_placeholder', 'text', [
+            'attr' => ['placeholder' => 'form.custom_domain_field_with_placeholder.attr.placeholder'],
             'translation_domain' => 'custom_domain_field_with_placeholder',
-        ));
-
-        $builder
-            ->add('choices_with_translation_domain', 'choice', array(
-                'choices' => array('form.choices_with_translation_domain.label' => 'form.choices_with_translation_domain.value'),
-                'choice_translation_domain' => 'choice-domain'
-            ))
-            ->add('choices_without_translation', 'choice', array(
-                'choices' => array('form.choices_without_translation.label' => 'form.choices_without_translation.value'),
-                'choice_translation_domain' => false,
-            ))
-            ->add('untranslatable_label', 'text', array(
-                'label' => 'form.untranslatable_label.label',
-                'translation_domain' => false,
-            ))
-        ;
-
-        $builder->add('untranslateable_field_with_placeholder', 'text', array(
-            'label' => 'field.with.placeholder.no.translation.domain',
-            'attr' => array('placeholder' => /** @Desc("Field with a placeholder value") */ 'form.placeholder.text.skip'),
-            'translation_domain' => false,
-        ));
-
-        $builder->add('custom_domain_field_with_placeholder', 'text', array(
-            'attr' => array('placeholder' => 'form.custom_domain_field_with_placeholder.attr.placeholder'),
-            'translation_domain' => 'custom_domain_field_with_placeholder',
-        ));
+        ]);
     }
 }

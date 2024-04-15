@@ -61,13 +61,10 @@ class ExtractTranslationCommand extends Command
         parent::__construct();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function configure()
+    protected function configure(): void
     {
         $this
-            ->setName('translation:extract')
+            ->setName('jms:translation:extract')
             ->setDescription('Extracts translation messages from your code.')
             ->addArgument('locales', InputArgument::IS_ARRAY, 'The locales for which to extract messages.')
             ->addOption('enable-extractor', null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'The alias of an extractor which should be enabled.')
@@ -180,7 +177,7 @@ class ExtractTranslationCommand extends Command
             $builder->setOutputFormat($outputFormat);
         }
 
-        if ($input->hasParameterOption('intl-icu')) {
+        if ($input->hasParameterOption('--intl-icu')) {
             $builder->setUseIcuMessageFormat(true);
         }
 

@@ -29,7 +29,7 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 class JMSTranslationExtension extends Extension
 {
-    public function load(array $configs, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container): void
     {
         $config = $this->processConfiguration(new Configuration($container), $configs);
 
@@ -41,7 +41,7 @@ class JMSTranslationExtension extends Extension
         $container->setParameter('jms_translation.locales', $config['locales']);
 
         foreach ($config['dumper'] as $option => $value) {
-            $container->setParameter("jms_translation.dumper.${option}", $value);
+            $container->setParameter('jms_translation.dumper.' . $option, $value);
         }
 
         $requests = [];

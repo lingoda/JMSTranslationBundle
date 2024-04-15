@@ -1,12 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace JMS\TranslationBundle\Tests\Translation\Extractor\File\Fixture;
 
 use Symfony\Component\Validator\Context\ExecutionContext;
 
-/**
- * Class MyEntity
- */
 class MyEntity
 {
     public function validateConstraintWithDefaultDomain(ExecutionContext $context)
