@@ -46,7 +46,7 @@ abstract class FileUtils
         $files = [];
         foreach (Finder::create()->in($directory)->depth('< 1')->files() as $file) {
             $isTranslationFile = preg_match(
-                '/^(?P<domain>[^\.]+?)(?P<icu>\+intl-icu)?\.(?P<locale>[^\.]+)\.(?P<format>[^\.]+)$/',
+                '/^(?P<domain>[^\.]+?(?P<icu>\+intl-icu)?)\.(?P<locale>[^\.]+)\.(?P<format>[^\.]+)$/',
                 basename((string) $file),
                 $match
             );
