@@ -95,11 +95,11 @@ class FileUtilsTest extends TestCase
 
         $files = FileUtils::findTranslationFiles($this->translationDirectory);
 
-        $this->assertArrayHasKey('messages', $files);
-        $this->assertArrayHasKey('en_GB', $files['messages']);
-        $this->assertEquals('xliff', $files['messages']['en_GB'][0]);
-        $this->assertInstanceOf(SplFileInfo::class, $files['messages']['en_GB'][1]);
-        $this->assertTrue($files['messages']['en_GB'][2]);
+        $this->assertArrayHasKey('messages+intl-icu', $files);
+        $this->assertArrayHasKey('en_GB', $files['messages+intl-icu']);
+        $this->assertEquals('xliff', $files['messages+intl-icu']['en_GB'][0]);
+        $this->assertInstanceOf(SplFileInfo::class, $files['messages+intl-icu']['en_GB'][1]);
+        $this->assertTrue($files['messages+intl-icu']['en_GB'][2]);
     }
 
     /**
