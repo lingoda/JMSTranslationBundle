@@ -90,7 +90,7 @@ class OutputLogger implements LoggerInterface
      *
      * @return void
      */
-    public function alert($message, array $context = []): void
+    public function alert(string|\Stringable $message, array $context = []): void
     {
         if (0 === ($this->level & self::ALERT)) {
             return;
