@@ -64,7 +64,7 @@ class OutputLogger implements LoggerInterface
      *
      * @return void
      */
-    public function emergency($message, array $context = [])
+    public function emergency(string|\Stringable $message, array $context = []): void
     {
         $this->emerg($message, $context);
     }
@@ -90,7 +90,7 @@ class OutputLogger implements LoggerInterface
      *
      * @return void
      */
-    public function alert($message, array $context = [])
+    public function alert(string|\Stringable $message, array $context = []): void
     {
         if (0 === ($this->level & self::ALERT)) {
             return;
@@ -105,7 +105,7 @@ class OutputLogger implements LoggerInterface
      *
      * @return void
      */
-    public function critical($message, array $context = [])
+    public function critical(string|\Stringable $message, array $context = []): void
     {
         $this->crit($message, $context);
     }
@@ -131,7 +131,7 @@ class OutputLogger implements LoggerInterface
      *
      * @return void
      */
-    public function error($message, array $context = [])
+    public function error(string|\Stringable $message, array $context = []): void
     {
         $this->err($message, $context);
     }
@@ -157,7 +157,7 @@ class OutputLogger implements LoggerInterface
      *
      * @return void
      */
-    public function warning($message, array $context = [])
+    public function warning(string|\Stringable $message, array $context = []): void
     {
         $this->warn($message, $context);
     }
@@ -183,7 +183,7 @@ class OutputLogger implements LoggerInterface
      *
      * @return void
      */
-    public function notice($message, array $context = [])
+    public function notice(string|\Stringable $message, array $context = []): void
     {
         if (0 === ($this->level & self::NOTICE)) {
             return;
@@ -198,7 +198,7 @@ class OutputLogger implements LoggerInterface
      *
      * @return void
      */
-    public function info($message, array $context = [])
+    public function info(string|\Stringable $message, array $context = []): void
     {
         if (0 === ($this->level & self::INFO)) {
             return;
@@ -213,7 +213,7 @@ class OutputLogger implements LoggerInterface
      *
      * @return void
      */
-    public function debug($message, array $context = [])
+    public function debug(string|\Stringable $message, array $context = []): void
     {
         if (0 === ($this->level & self::DEBUG)) {
             return;
@@ -229,7 +229,7 @@ class OutputLogger implements LoggerInterface
      *
      * @return void
      */
-    public function log($level, $message, array $context = [])
+    public function log($level, string|\Stringable $message, array $context = []): void
     {
         if (0 === ($this->level & $level)) {
             return;
