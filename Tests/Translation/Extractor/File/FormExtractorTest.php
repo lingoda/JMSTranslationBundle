@@ -61,6 +61,27 @@ class FormExtractorTest extends PhpFileExtractorTestCase
         $this->assertEquals($expected, $this->extract('MyPlaceholderFormType.php'));
     }
 
+    public function testChoiceTranslationDomainAndAttrInFieldDomain(): void
+    {
+        $expected          = new MessageCatalogue();
+        $fileSourceFactory = $this->getFileSourceFactory();
+        $fixtureSplInfo    = new \SplFileInfo(__DIR__ . '/Fixture/MyChoiceDomainFormType.php');
+
+        $message = new Message('form.label.choices_with_choice_domain', 'form-domain');
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 33));
+        $expected->add($message);
+
+        $message = new Message('form.choice.with_choice_domain', 'choice-domain');
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 34));
+        $expected->add($message);
+
+        $message = new Message('form.placeholder.custom_domain', 'form-domain');
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 39));
+        $expected->add($message);
+
+        $this->assertEquals($expected, $this->extract('MyChoiceDomainFormType.php'));
+    }
+
     #[Group('testExtract')]
     public function testExtract(): void
     {
