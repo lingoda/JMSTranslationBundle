@@ -68,15 +68,15 @@ class FormExtractorTest extends PhpFileExtractorTestCase
         $fixtureSplInfo    = new \SplFileInfo(__DIR__ . '/Fixture/MyChoiceDomainFormType.php');
 
         $message = new Message('form.label.choices_with_choice_domain', 'form-domain');
-        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 33));
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 32));
         $expected->add($message);
 
         $message = new Message('form.choice.with_choice_domain', 'choice-domain');
-        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 34));
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 33));
         $expected->add($message);
 
         $message = new Message('form.placeholder.custom_domain', 'form-domain');
-        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 39));
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 38));
         $expected->add($message);
 
         $this->assertEquals($expected, $this->extract('MyChoiceDomainFormType.php'));

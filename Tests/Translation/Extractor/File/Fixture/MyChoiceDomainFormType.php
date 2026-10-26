@@ -18,7 +18,6 @@ declare(strict_types=1);
  * limitations under the License.
  */
 
-
 namespace JMS\TranslationBundle\Tests\Translation\Extractor\File\Fixture;
 
 use Symfony\Component\Form\AbstractType;
