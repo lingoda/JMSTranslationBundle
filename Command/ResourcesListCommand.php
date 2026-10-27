@@ -32,26 +32,14 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class ResourcesListCommand extends Command
 {
-    /**
-     * @var string
-     */
-    private $projectDir;
+    private string $projectDir;
 
-    /**
-     * @var string|null
-     */
-    private $rootDir;
+    private array $bundles;
 
-    /**
-     * @var array
-     */
-    private $bundles;
-
-    public function __construct(string $projectDir, array $bundles, ?string $rootDir)
+    public function __construct(string $projectDir, array $bundles)
     {
         $this->projectDir = $projectDir;
         $this->bundles = $bundles;
-        $this->rootDir = $rootDir;
 
         parent::__construct();
     }
@@ -67,28 +55,20 @@ class ResourcesListCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $directoriesToSearch = [];
-
-        // TODO: Remove this block when dropping support of Symfony 4 as it will always be false
-        if ($this->rootDir !== null) {
-            $directoriesToSearch[] = realpath($this->rootDir);
-        }
-
         $basePath = realpath($this->projectDir);
-
         $directoriesToSearch[] = $basePath;
-
         $dirs = $this->retrieveDirs();
 
         if (!$input->hasParameterOption('--files')) {
             $output->writeln('<info>Directories list :</info>');
             foreach ($dirs as $dir) {
-                $path = str_replace($directoriesToSearch, ['%kernel.root_dir%', '%kernel.project_dir%'], $dir);
+                $path = str_replace($directoriesToSearch, ['%kernel.project_dir%'], $dir);
                 $output->writeln(sprintf('    - %s', $path));
             }
 
             $output->writeln('done!');
 
-            return 0;
+            return Command::SUCCESS;
         }
 
         $output->writeln('<info>Resources list :</info>');
@@ -102,15 +82,10 @@ class ResourcesListCommand extends Command
 
         $output->writeln('done!');
 
-        return 0;
+        return Command::SUCCESS;
     }
 
-    /**
-     * @param array $dirs
-     *
-     * @return array
-     */
-    private function retrieveFiles(array $dirs)
+    private function retrieveFiles(array $dirs): array
     {
         $files = [];
         // Register translation resources
@@ -127,10 +102,8 @@ class ResourcesListCommand extends Command
 
     /**
      * The following methods is derived from code of the FrameworkExtension.php file from the Symfony2 framework
-     *
-     * @return array
      */
-    private function retrieveDirs()
+    private function retrieveDirs(): array
     {
         // Discover translation directories
         $dirs = [];
@@ -139,14 +112,6 @@ class ResourcesListCommand extends Command
             if (is_dir($dir = dirname($reflection->getFilename()) . '/Resources/translations')) {
                 $dirs[] = $dir;
             }
-        }
-
-        // TODO: Remove this block when dropping support of Symfony 4
-        if (
-            $this->rootDir !== null &&
-            is_dir($dir = $this->rootDir . '/Resources/translations')
-        ) {
-            $dirs[] = $dir;
         }
 
         if (is_dir($dir = $this->projectDir . '/translations')) {

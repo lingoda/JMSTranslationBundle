@@ -25,16 +25,15 @@ use JMS\TranslationBundle\Exception\RuntimeException;
 use JMS\TranslationBundle\Model\Message;
 use JMS\TranslationBundle\Model\MessageCatalogue;
 use JMS\TranslationBundle\Translation\Extractor\File\ValidationExtractor;
-use PhpParser\Lexer;
-use PhpParser\Parser;
 use PhpParser\ParserFactory;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Mapping\Factory\LazyLoadingMetadataFactory;
 use Symfony\Component\Validator\Mapping\Loader\AnnotationLoader;
+use Symfony\Component\Validator\Mapping\Loader\AttributeLoader;
 
 class ValidationExtractorTest extends TestCase
 {
-    public function testExtractConstraints()
+    public function testExtractConstraints(): void
     {
         $expected = new MessageCatalogue();
         $path     = __DIR__ . '/Fixture/MyFormModel.php';
@@ -45,7 +44,7 @@ class ValidationExtractorTest extends TestCase
         $this->assertEquals($expected, $this->extract('MyFormModel.php'));
     }
 
-    private function extract($file, ?ValidationExtractor $extractor = null)
+    private function extract($file, ?ValidationExtractor $extractor = null): MessageCatalogue
     {
         $fileRealPath = __DIR__ . '/Fixture/' . $file;
         if (! is_file($fileRealPath)) {
@@ -55,18 +54,11 @@ class ValidationExtractorTest extends TestCase
         $metadataFactoryClass = LazyLoadingMetadataFactory::class;
 
         if ($extractor === null) {
-            $factory   = new $metadataFactoryClass(new AnnotationLoader(new AnnotationReader()));
+            $factory   = new $metadataFactoryClass(class_exists(AnnotationLoader::class) ? new AnnotationLoader(new AnnotationReader()) : new AttributeLoader());
             $extractor = new ValidationExtractor($factory);
         }
 
-        $lexer = new Lexer();
-        if (class_exists(ParserFactory::class)) {
-            $factory = new ParserFactory();
-            $parser  = \method_exists($factory, 'create') ? $factory->create(ParserFactory::PREFER_PHP7, $lexer) : $factory->createForNewestSupportedVersion();
-        } else {
-            $parser = new Parser($lexer);
-        }
-
+        $parser = (new ParserFactory())->createForNewestSupportedVersion();
         $ast = $parser->parse(file_get_contents($fileRealPath));
 
         $catalogue = new MessageCatalogue();

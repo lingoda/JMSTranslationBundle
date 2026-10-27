@@ -25,9 +25,9 @@ use JMS\TranslationBundle\Model\Message;
 use JMS\TranslationBundle\Model\MessageCatalogue;
 use PHPUnit\Framework\TestCase;
 
-abstract class BaseDumperTest extends TestCase
+abstract class DumperTestCase extends TestCase
 {
-    public function testSimpleDump()
+    public function testSimpleDump(): void
     {
         $catalogue = new MessageCatalogue();
         $catalogue->setLocale('en');
@@ -38,7 +38,7 @@ abstract class BaseDumperTest extends TestCase
         $this->assertEquals($this->getOutput('simple'), $this->dump($catalogue, 'messages'));
     }
 
-    public function testDumpWithMetadata()
+    public function testDumpWithMetadata(): void
     {
         $catalogue = new MessageCatalogue();
         $catalogue->setLocale('en');
@@ -51,7 +51,7 @@ abstract class BaseDumperTest extends TestCase
         $this->assertEquals($this->getOutput('with_metadata'), $this->dump($catalogue, 'messages'));
     }
 
-    public function testDumpStructure()
+    public function testDumpStructure(): void
     {
         $catalogue = new MessageCatalogue();
         $catalogue->setLocale('en');
@@ -64,7 +64,7 @@ abstract class BaseDumperTest extends TestCase
         $this->assertEquals($this->getOutput('structure'), $this->dump($catalogue, 'messages'));
     }
 
-    public function testDumpStructureWithMetadata()
+    public function testDumpStructureWithMetadata(): void
     {
         $catalogue = new MessageCatalogue();
         $catalogue->setLocale('en');

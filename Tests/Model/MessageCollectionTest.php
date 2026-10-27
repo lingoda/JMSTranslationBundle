@@ -23,11 +23,12 @@ namespace JMS\TranslationBundle\Tests\Model;
 use JMS\TranslationBundle\Model\FileSource;
 use JMS\TranslationBundle\Model\Message;
 use JMS\TranslationBundle\Model\MessageCollection;
+use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\TestCase;
 
 class MessageCollectionTest extends TestCase
 {
-    public function testAdd()
+    public function testAdd(): void
     {
         $domain = new MessageCollection();
         $domain->add($m = new Message('foo'));
@@ -35,7 +36,7 @@ class MessageCollectionTest extends TestCase
         $this->assertSame(['foo' => $m], $domain->all());
     }
 
-    public function testAddMerges()
+    public function testAddMerges(): void
     {
         $m2 = $this->createMock(Message::class);
 
@@ -49,7 +50,7 @@ class MessageCollectionTest extends TestCase
         $col->add($m2);
     }
 
-    public function testGet()
+    public function testGet(): void
     {
         $domain = new MessageCollection();
         $domain->add($message = Message::create('foo'));
@@ -58,7 +59,7 @@ class MessageCollectionTest extends TestCase
         $this->assertSame($message, $domain->get('foo'));
     }
 
-    public function testGetThrowsExceptionWhenMessageDoesNotExist()
+    public function testGetThrowsExceptionWhenMessageDoesNotExist(): void
     {
         $this->expectException(\InvalidArgumentException::class);
 
@@ -66,7 +67,7 @@ class MessageCollectionTest extends TestCase
         $catalogue->get('foo');
     }
 
-    public function testSet()
+    public function testSet(): void
     {
         $col = new MessageCollection();
         $col->add($m = Message::create('foo'));
@@ -75,7 +76,7 @@ class MessageCollectionTest extends TestCase
         $this->assertSame($m, $col->get('foo'));
     }
 
-    public function testSetDoesNotMerge()
+    public function testSetDoesNotMerge(): void
     {
         $m2 = $this->createMock(Message::class);
         $m2
@@ -96,7 +97,7 @@ class MessageCollectionTest extends TestCase
         $this->assertSame($m2, $col->get('foo'));
     }
 
-    public function testSort()
+    public function testSort(): void
     {
         $col = new MessageCollection();
         $col->add(new Message('b'));
@@ -109,7 +110,7 @@ class MessageCollectionTest extends TestCase
         $this->assertEquals(['a', 'b', 'c'], array_keys($col->all()));
     }
 
-    public function testFilter()
+    public function testFilter(): void
     {
         $col = new MessageCollection();
         $col->add($m = new Message('a'));
@@ -123,7 +124,7 @@ class MessageCollectionTest extends TestCase
         $this->assertSame($m, $col->get('a'));
     }
 
-    public function testMerge()
+    public function testMerge(): void
     {
         $col = new MessageCollection();
         $col->add(new Message('a'));
@@ -135,7 +136,7 @@ class MessageCollectionTest extends TestCase
         $this->assertEquals(['a', 'b'], array_keys($col->all()));
     }
 
-    public function testAddChecksConsistency()
+    public function testAddChecksConsistency(): void
     {
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('The message \'a\' exists with two different descs: \'a\' in foo on line 1, and \'b\' in bar on line 2');
@@ -154,10 +155,8 @@ class MessageCollectionTest extends TestCase
         $col->add($msg2);
     }
 
-    /**
-     * @doesNotPerformAssertions
-     */
-    public function testAddChecksConsistencyButAllowsEmptyDescs()
+    #[DoesNotPerformAssertions()]
+    public function testAddChecksConsistencyButAllowsEmptyDescs(): void
     {
         $col = new MessageCollection();
 
@@ -201,7 +200,7 @@ class MessageCollectionTest extends TestCase
         $col->add($msg2);
     }
 
-    public function testSetChecksConsistency()
+    public function testSetChecksConsistency(): void
     {
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('The message \'a\' exists with two different descs: \'a\' in foo on line 1, and \'b\' in bar on line 2');
@@ -220,10 +219,8 @@ class MessageCollectionTest extends TestCase
         $col->set($msg2);
     }
 
-    /**
-     * @doesNotPerformAssertions
-     */
-    public function testSetChecksConsistencyButAllowsEmptyDescs()
+    #[DoesNotPerformAssertions()]
+    public function testSetChecksConsistencyButAllowsEmptyDescs(): void
     {
         $col = new MessageCollection();
 

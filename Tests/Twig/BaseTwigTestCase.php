@@ -30,13 +30,13 @@ use Twig\Source;
 
 abstract class BaseTwigTestCase extends TestCase
 {
-    final protected function parse($file, $debug = false)
+    final protected function parse($file, $debug = false): string
     {
         $content = file_get_contents(__DIR__ . '/Fixture/' . $file);
 
         $env = new Environment(new ArrayLoader([]));
         $env->addExtension(new SymfonyTranslationExtension($translator = new IdentityTranslator()));
-        $env->addExtension(new TranslationExtension($translator, $debug));
+        $env->addExtension(new TranslationExtension(null, $debug));
 
         return $env->compile($env->parse($env->tokenize(new Source($content, 'whatever')))->getNode('body'));
     }

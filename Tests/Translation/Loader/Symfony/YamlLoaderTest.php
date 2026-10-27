@@ -23,9 +23,9 @@ namespace JMS\TranslationBundle\Tests\Translation\Loader\Symfony;
 use JMS\TranslationBundle\Exception\InvalidArgumentException;
 use Symfony\Component\Translation\Loader\YamlFileLoader;
 
-class YamlLoaderTest extends BaseLoaderTest
+class YamlLoaderTest extends LoaderTestCase
 {
-    protected function getLoader()
+    protected function getLoader(): YamlFileLoader
     {
         return new YamlFileLoader();
     }

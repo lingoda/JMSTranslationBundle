@@ -6,16 +6,13 @@ namespace JMS\TranslationBundle\Tests\Translation;
 
 use JMS\TranslationBundle\Translation\FileSourceFactory;
 use Nyholm\NSA;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class FileSourceFactoryTest extends TestCase
 {
-    /**
-     * Test many different path to make sure we find the relative one.
-     *
-     * @dataProvider pathProvider
-     */
-    public function testGetRelativePath($root, $projectRoot, $file, $expected, $message = '')
+    #[DataProvider('pathProvider')]
+    public function testGetRelativePath($root, $projectRoot, $file, $expected, $message = ''): void
     {
         $factory = new FileSourceFactory($root, $projectRoot);
         $result  = NSA::invokeMethod($factory, 'getRelativePath', $file);
@@ -23,7 +20,7 @@ class FileSourceFactoryTest extends TestCase
         $this->assertEquals($expected, $result, $message);
     }
 
-    public function pathProvider()
+    public static function pathProvider(): array
     {
         return [
             [

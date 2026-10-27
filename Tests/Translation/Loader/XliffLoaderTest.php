@@ -25,14 +25,13 @@ use JMS\TranslationBundle\Model\Message\XliffMessageState;
 use JMS\TranslationBundle\Model\MessageCatalogue;
 use JMS\TranslationBundle\Translation\Dumper\XliffDumper;
 use JMS\TranslationBundle\Translation\Loader\XliffLoader;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class XliffLoaderTest extends TestCase
 {
-    /**
-     * @dataProvider getTestFiles
-     */
-    public function testLoadIntegration($file)
+    #[DataProvider('getTestFiles')]
+    public function testLoadIntegration(string $file): void
     {
         $loader    = new XliffLoader();
         $catalogue = $loader->load($file, 'en');
@@ -43,7 +42,7 @@ class XliffLoaderTest extends TestCase
         $this->assertStringEqualsFile($file, $dumper->dump($catalogue));
     }
 
-    public function testLoadWithSymfonyFormat()
+    public function testLoadWithSymfonyFormat(): void
     {
         $loader = new XliffLoader();
 
@@ -64,7 +63,7 @@ class XliffLoaderTest extends TestCase
         );
     }
 
-    public function testWorkflowAttributes()
+    public function testWorkflowAttributes(): void
     {
         $loader = new XliffLoader();
 
@@ -82,7 +81,7 @@ class XliffLoaderTest extends TestCase
         );
     }
 
-    public function getTestFiles()
+    public static function getTestFiles(): array
     {
         $files   = [];
         $files[] = [__DIR__ . '/../Dumper/xliff/simple.xml'];

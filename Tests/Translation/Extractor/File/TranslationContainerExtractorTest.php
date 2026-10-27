@@ -25,14 +25,12 @@ use JMS\TranslationBundle\Model\FileSource;
 use JMS\TranslationBundle\Model\Message;
 use JMS\TranslationBundle\Model\MessageCatalogue;
 use JMS\TranslationBundle\Translation\Extractor\File\TranslationContainerExtractor;
-use PhpParser\Lexer;
-use PhpParser\Parser;
 use PhpParser\ParserFactory;
 use PHPUnit\Framework\TestCase;
 
 class TranslationContainerExtractorTest extends TestCase
 {
-    public function testExtractFormModel()
+    public function testExtractFormModel(): void
     {
         $expected = new MessageCatalogue();
         $path     = __DIR__ . '/Fixture/MyFormModel.php';
@@ -48,7 +46,7 @@ class TranslationContainerExtractorTest extends TestCase
         $this->assertEquals($expected, $this->extract('MyFormModel.php'));
     }
 
-    private function extract($file, ?TranslationContainerExtractor $extractor = null)
+    private function extract($file, ?TranslationContainerExtractor $extractor = null): MessageCatalogue
     {
         $fileRealPath = __DIR__ . '/Fixture/' . $file;
         if (! is_file($fileRealPath)) {
@@ -59,14 +57,7 @@ class TranslationContainerExtractorTest extends TestCase
             $extractor = new TranslationContainerExtractor();
         }
 
-        $lexer = new Lexer();
-        if (class_exists(ParserFactory::class)) {
-            $factory = new ParserFactory();
-            $parser  = \method_exists($factory, 'create') ? $factory->create(ParserFactory::PREFER_PHP7, $lexer) : $factory->createForNewestSupportedVersion();
-        } else {
-            $parser = new Parser($lexer);
-        }
-
+        $parser = (new ParserFactory())->createForNewestSupportedVersion();
         $ast = $parser->parse(file_get_contents($fileRealPath));
 
         $catalogue = new MessageCatalogue();

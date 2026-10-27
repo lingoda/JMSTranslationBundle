@@ -26,6 +26,7 @@ use JMS\TranslationBundle\Annotation\Desc;
 use JMS\TranslationBundle\Annotation\Ignore;
 use JMS\TranslationBundle\Annotation\Meaning;
 use JMS\TranslationBundle\Model\Message;
+use JMS\TranslationBundle\Model\MessageCatalogue;
 use JMS\TranslationBundle\Translation\Extractor\File\DefaultPhpFileExtractor;
 use JMS\TranslationBundle\Translation\Extractor\File\FormExtractor;
 use JMS\TranslationBundle\Translation\Extractor\File\TranslationContainerExtractor;
@@ -40,13 +41,14 @@ use Symfony\Bridge\Twig\Extension\TranslationExtension as SymfonyTranslationExte
 use Symfony\Component\Translation\IdentityTranslator;
 use Symfony\Component\Validator\Mapping\Factory\LazyLoadingMetadataFactory;
 use Symfony\Component\Validator\Mapping\Loader\AnnotationLoader;
+use Symfony\Component\Validator\Mapping\Loader\AttributeLoader;
 use Twig\Environment;
 use Twig\Loader\ArrayLoader;
 use Twig\Loader\FilesystemLoader;
 
 class FileExtractorTest extends TestCase
 {
-    public function testExtractWithSimpleTestFixtures()
+    public function testExtractWithSimpleTestFixtures(): void
     {
         $expected          = [];
         $basePath          = __DIR__ . '/Fixture/SimpleTest/';
@@ -99,11 +101,11 @@ class FileExtractorTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    private function extract($directory)
+    private function extract($directory): MessageCatalogue
     {
         $twig = new Environment(new ArrayLoader([]));
         $twig->addExtension(new SymfonyTranslationExtension($translator = new IdentityTranslator()));
-        $twig->addExtension(new TranslationExtension($translator));
+        $twig->addExtension(new TranslationExtension(null));
         $loader = new FilesystemLoader(realpath(__DIR__ . '/Fixture/SimpleTest/Resources/views/'));
         $twig->setLoader($loader);
 
@@ -117,7 +119,7 @@ class FileExtractorTest extends TestCase
 
         $metadataFactoryClass = LazyLoadingMetadataFactory::class;
 
-        $factory = new $metadataFactoryClass(new AnnotationLoader(new AnnotationReader()));
+        $factory = new $metadataFactoryClass(class_exists(AnnotationLoader::class) ? new AnnotationLoader(new AnnotationReader()) : new AttributeLoader());
 
         $dummyFileSourceFactory = new FileSourceFactory('faux');
 

@@ -25,9 +25,9 @@ use JMS\TranslationBundle\Translation\Loader\Symfony\XliffLoader;
 use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\Translation\MessageCatalogue;
 
-class XliffLoaderTest extends BaseLoaderTest
+class XliffLoaderTest extends LoaderTestCase
 {
-    public function testLoadOldFormat()
+    public function testLoadOldFormat(): void
     {
         $expected = new MessageCatalogue('en');
         $expected->add([
@@ -53,7 +53,7 @@ class XliffLoaderTest extends BaseLoaderTest
         return $fileRealPath;
     }
 
-    protected function getLoader()
+    protected function getLoader(): XliffLoader
     {
         return new XliffLoader();
     }

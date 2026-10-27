@@ -31,9 +31,9 @@ use Twig\Node\Expression\ConstantExpression;
 use Twig\Node\Expression\FilterExpression;
 use Twig\Node\Node;
 use Twig\NodeTraverser;
-use Twig\NodeVisitor\AbstractNodeVisitor;
+use Twig\NodeVisitor\NodeVisitorInterface;
 
-class TwigFileExtractor extends AbstractNodeVisitor implements FileVisitorInterface
+class TwigFileExtractor implements FileVisitorInterface, NodeVisitorInterface
 {
     /**
      * @var FileSourceFactory
@@ -66,28 +66,25 @@ class TwigFileExtractor extends AbstractNodeVisitor implements FileVisitorInterf
         $this->traverser = new NodeTraverser($env, [$this]);
     }
 
-    /**
-     * @return Node
-     */
-    protected function doEnterNode(Node $node, Environment $env)
+    public function enterNode(Node $node, Environment $env): Node
     {
         $this->stack[] = $node;
 
         if ($node instanceof TransNode) {
             $id = $node->getNode('body')->getAttribute('data');
             $domain = 'messages';
-            // Older version of Symfony are storing null in the node instead of omitting it
-            if ($node->hasNode('domain') && null !== $domainNode = $node->getNode('domain')) {
-                $domain = $domainNode->getAttribute('value');
+
+            if ($node->hasNode('domain')) {
+                $domain = $node->getNode('domain')->getAttribute('value');
             }
 
             $message = new Message($id, $domain);
             $message->addSource($this->fileSourceFactory->create($this->file, $node->getTemplateLine()));
             $this->catalogue->add($message);
         } elseif ($node instanceof FilterExpression) {
-            $name = $node->getNode('filter')->getAttribute('value');
+            $name = $node->hasAttribute('name') ? $node->getAttribute('name') : $node->getNode('filter')->getAttribute('value');
 
-            if ('trans' === $name || 'transchoice' === $name) {
+            if ('trans' === $name) {
                 $idNode = $node->getNode('node');
                 if (!$idNode instanceof ConstantExpression) {
                     return $node;
@@ -97,7 +94,7 @@ class TwigFileExtractor extends AbstractNodeVisitor implements FileVisitorInterf
                 }
                 $id = $idNode->getAttribute('value');
 
-                $index     = $name === 'trans' ? 1 : 2;
+                $index     = 1;
                 $domain    = 'messages';
                 $arguments = iterator_to_array($node->getNode('arguments'));
                 if (isset($arguments[$index])) {
@@ -120,7 +117,7 @@ class TwigFileExtractor extends AbstractNodeVisitor implements FileVisitorInterf
                         break;
                     }
 
-                    $name = $this->stack[$i]->getNode('filter')->getAttribute('value');
+                    $name = $this->stack[$i]->hasAttribute('name') ? $this->stack[$i]->getAttribute('name') : $this->stack[$i]->getNode('filter')->getAttribute('value');
                     if ($name === 'desc' || $name === 'meaning') {
                         $arguments = iterator_to_array($this->stack[$i]->getNode('arguments'));
                         if (! isset($arguments[0])) {
@@ -145,10 +142,7 @@ class TwigFileExtractor extends AbstractNodeVisitor implements FileVisitorInterf
         return $node;
     }
 
-    /**
-     * @return int
-     */
-    public function getPriority()
+    public function getPriority(): int
     {
         return 0;
     }
@@ -178,10 +172,7 @@ class TwigFileExtractor extends AbstractNodeVisitor implements FileVisitorInterf
         }
     }
 
-    /**
-     * @return Node
-     */
-    protected function doLeaveNode(Node $node, Environment $env)
+    public function leaveNode(Node $node, Environment $env): Node
     {
         array_pop($this->stack);
 

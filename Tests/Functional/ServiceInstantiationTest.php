@@ -7,6 +7,7 @@ namespace JMS\TranslationBundle\Tests\Functional;
 use JMS\TranslationBundle\Translation\ConfigFactory;
 use JMS\TranslationBundle\Translation\Updater;
 use JMS\TranslationBundle\Twig\TranslationExtension;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Make sure we instantiate services.
@@ -20,7 +21,7 @@ class ServiceInstantiationTest extends BaseTestCase
         static::createClient();
     }
 
-    public function provider()
+    public static function provider(): array
     {
         return [
             ['jms_translation.updater', Updater::class],
@@ -29,10 +30,8 @@ class ServiceInstantiationTest extends BaseTestCase
         ];
     }
 
-    /**
-     * @dataProvider provider
-     */
-    public function testServiceExists($serviceId, $class)
+    #[DataProvider('provider')]
+    public function testServiceExists(string $serviceId, string $class): void
     {
         $container = static::$kernel->getContainer();
         $this->assertTrue($container->has($serviceId));

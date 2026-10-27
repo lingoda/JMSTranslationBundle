@@ -6,6 +6,7 @@ namespace JMS\TranslationBundle\Tests\DependencyInjection\Compiler;
 
 use JMS\TranslationBundle\DependencyInjection\Compiler\MountDumpersPass;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
@@ -20,10 +21,8 @@ class MountDumpersPassTest extends AbstractCompilerPassTestCase
         $container->addCompilerPass(new MountDumpersPass());
     }
 
-    /**
-     * @test
-     */
-    public function ifCompilerPassCollectsServicesByArgumentTheseWillExist()
+    #[Test()]
+    public function ifCompilerPassCollectsServicesByArgumentTheseWillExist(): void
     {
         $collectingService = new Definition();
         $this->setDefinition('jms_translation.file_writer', $collectingService);

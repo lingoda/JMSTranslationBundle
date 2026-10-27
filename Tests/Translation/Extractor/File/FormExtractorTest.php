@@ -23,13 +23,12 @@ namespace JMS\TranslationBundle\Tests\Translation\Extractor\File;
 use JMS\TranslationBundle\Model\Message;
 use JMS\TranslationBundle\Model\MessageCatalogue;
 use JMS\TranslationBundle\Translation\Extractor\File\FormExtractor;
+use PHPUnit\Framework\Attributes\Group;
 
-class FormExtractorTest extends BasePhpFileExtractorTest
+class FormExtractorTest extends PhpFileExtractorTestCase
 {
-    /**
-     * @group placeholder
-     */
-    public function testPlaceholderExtract()
+    #[Group('placeholder')]
+    public function testPlaceholderExtract(): void
     {
         $expected          = new MessageCatalogue();
         $fileSourceFactory = $this->getFileSourceFactory();
@@ -62,127 +61,113 @@ class FormExtractorTest extends BasePhpFileExtractorTest
         $this->assertEquals($expected, $this->extract('MyPlaceholderFormType.php'));
     }
 
-    /**
-     * @group testExtract
-     */
-    public function testExtract()
+    public function testChoiceTranslationDomainAndAttrInFieldDomain(): void
+    {
+        $expected          = new MessageCatalogue();
+        $fileSourceFactory = $this->getFileSourceFactory();
+        $fixtureSplInfo    = new \SplFileInfo(__DIR__ . '/Fixture/MyChoiceDomainFormType.php');
+
+        $message = new Message('form.label.choices_with_choice_domain', 'form-domain');
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 32));
+        $expected->add($message);
+
+        $message = new Message('form.choice.with_choice_domain', 'choice-domain');
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 33));
+        $expected->add($message);
+
+        $message = new Message('form.placeholder.custom_domain', 'form-domain');
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 38));
+        $expected->add($message);
+
+        $this->assertEquals($expected, $this->extract('MyChoiceDomainFormType.php'));
+    }
+
+    #[Group('testExtract')]
+    public function testExtract(): void
     {
         $expected          = new MessageCatalogue();
         $fileSourceFactory = $this->getFileSourceFactory();
         $fixtureSplInfo    = new \SplFileInfo(__DIR__ . '/Fixture/MyFormType.php');
 
         $message = new Message('foo');
-        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 37));
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 35));
         $expected->add($message);
 
         $message = new Message('form.states.empty_value');
         $message->setDesc('Please select a state');
-        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 38));
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 36));
         $expected->add($message);
 
         $message = new Message('form.label.lastname');
         $message->setDesc('Lastname');
-        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 35));
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 33));
         $expected->add($message);
 
         $message = new Message('form.label.firstname');
-        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 34));
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 32));
         $expected->add($message);
 
         $message = new Message('form.label.password');
-        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 42));
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 40));
         $expected->add($message);
 
         $message = new Message('form.label.password_repeated');
         $message->setDesc('Repeat password');
-        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 43));
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 41));
         $expected->add($message);
 
         $message = new Message('form.label.street', 'address');
         $message->setDesc('Street');
-        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 47));
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 45));
         $expected->add($message);
 
         $message = new Message('form.street.empty_value', 'validators');
         $message->setDesc('You should fill in the street');
-        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 50));
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 48));
         $expected->add($message);
 
         $message = new Message('form.label.zip', 'address');
         $message->setDesc('ZIP');
-        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 57));
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 54));
         $expected->add($message);
 
         $message = new Message('form.error.password_mismatch', 'validators');
         $message->setDesc('The entered passwords do not match');
-        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 44));
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 42));
         $expected->add($message);
 
         $message = new Message('form.label.created');
-        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 76));
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 65));
         $expected->add($message);
 
         $message = new Message('field.with.placeholder');
-        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 61));
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 58));
         $expected->add($message);
 
         $message = new Message('form.placeholder.text');
         $message->setDesc('Field with a placeholder value');
-        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 62));
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 59));
         $expected->add($message);
 
         $message = new Message('form.placeholder.text.but.no.label');
         $message->setDesc('Field with a placeholder but no label');
-        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 66));
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 63));
         $expected->add($message);
 
         $message = new Message('form.dueDate.empty.year');
-        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 79));
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 67));
         $expected->add($message);
 
         $message = new Message('form.dueDate.empty.month');
-        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 80));
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 67));
         $expected->add($message);
 
         $message = new Message('form.dueDate.empty.day');
-        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 81));
+        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 67));
         $expected->add($message);
 
         $message = new Message(0);
         $message->addSource($fileSourceFactory->create($fixtureSplInfo, -1));
-        $expected->add($message);
-
-        $message = new Message('form.choices_with_translation_domain.label', 'choice-domain');
-        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 87));
-        $expected->add($message);
-
-        $message = new Message('form.untranslatable_label.label', 'messages');
-        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 95));
-        $expected->add($message);
-
-        $message = new Message('field.with.placeholder.no.translation.domain', 'messages');
-        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 100));
-        $expected->add($message);
-
-        $message = new Message('form.choices_without_translation.label', 'messages');
-        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 91));
-        $expected->add($message);
-
-        $message = new Message('form.placeholder.text.skip', 'messages');
-        $message->setDesc('Field with a placeholder value');
-        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 101));
-        $expected->add($message);
-
-        $message = new Message('form.custom_domain_field_with_placeholder.attr.placeholder', 'custom_domain_field_with_placeholder');
-        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 106));
-        $expected->add($message);
-
-        $message = new Message('form.choice.choice_as_values.label.foo');
-        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 70));
-        $expected->add($message);
-
-        $message = new Message('form.choice.choice_as_values.label.bar');
-        $message->addSource($fileSourceFactory->create($fixtureSplInfo, 71));
         $expected->add($message);
 
         $this->assertEquals($expected, $this->extract('MyFormType.php'));
@@ -215,7 +200,7 @@ class FormExtractorTest extends BasePhpFileExtractorTest
      * This test is used to check if the default 'translation_domain' option
      * set for the entire form is extracted correctly
      */
-    public function testExtractWithDefaultDomain()
+    public function testExtractWithDefaultDomain(): void
     {
         $this->assertEquals($this->getDefaultDomainFixture(__DIR__ . '/Fixture/MyFormTypeWithDefaultDomain.php'), $this->extract('MyFormTypeWithDefaultDomain.php'));
     }
@@ -224,7 +209,7 @@ class FormExtractorTest extends BasePhpFileExtractorTest
      * This test is used to check if the default 'translation_domain' option
      * set for the entire form is extracted correctly when set via setDefault
      */
-    public function testExtractWithDefaultDomainSetDefault()
+    public function testExtractWithDefaultDomainSetDefault(): void
     {
         $this->assertEquals($this->getDefaultDomainFixture(__DIR__ . '/Fixture/MyFormTypeWithDefaultDomainSetDefault.php'), $this->extract('MyFormTypeWithDefaultDomainSetDefault.php'));
     }
@@ -233,7 +218,7 @@ class FormExtractorTest extends BasePhpFileExtractorTest
      * This test is used to check if translation from subscriber classes and even closures
      * are correctly extracted
      */
-    public function testExtractWithSubscriberAndListener()
+    public function testExtractWithSubscriberAndListener(): void
     {
         $expected                 = new MessageCatalogue();
         $fileSourceFactory        = $this->getFileSourceFactory();
@@ -279,13 +264,13 @@ class FormExtractorTest extends BasePhpFileExtractorTest
      * with the same extractor instance to see that the default domain isn't
      * persisting.
      */
-    public function testExtractWithNoDefaultDomainAfterDefaultDomainExtraction()
+    public function testExtractWithNoDefaultDomainAfterDefaultDomainExtraction(): void
     {
         $this->testExtractWithDefaultDomain();
         $this->testExtract();
     }
 
-    public function testAttrArrayForm()
+    public function testAttrArrayForm(): void
     {
         $expected          = new MessageCatalogue();
         $fileSourceFactory = $this->getFileSourceFactory();
@@ -298,7 +283,7 @@ class FormExtractorTest extends BasePhpFileExtractorTest
         $this->assertEquals($expected, $this->extract('MyAttrArrayType.php'));
     }
 
-    protected function getDefaultExtractor()
+    protected function getDefaultExtractor(): FormExtractor
     {
         return new FormExtractor($this->getDocParser(), $this->getFileSourceFactory());
     }

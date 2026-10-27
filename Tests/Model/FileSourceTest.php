@@ -22,50 +22,49 @@ namespace JMS\TranslationBundle\Tests\Model;
 
 use JMS\TranslationBundle\Model\FileSource;
 use JMS\TranslationBundle\Model\SourceInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class FileSourceTest extends TestCase
 {
-    public function testGetPath()
+    public function testGetPath(): void
     {
         $r = new FileSource('foo');
         $this->assertEquals('foo', $r->getPath());
     }
 
-    public function testGetLine()
+    public function testGetLine(): void
     {
         $r = new FileSource('foo');
         $this->assertNull($r->getLine());
     }
 
-    public function testGetLineWhenSet()
+    public function testGetLineWhenSet(): void
     {
         $r = new FileSource('foo', 2);
         $this->assertEquals(2, $r->getLine());
     }
 
-    public function testGetColumn()
+    public function testGetColumn(): void
     {
         $r = new FileSource('foo');
         $this->assertNull($r->getColumn());
     }
 
-    public function testGetColumnWhenSet()
+    public function testGetColumnWhenSet(): void
     {
         $r = new FileSource('foo', 1, 2);
         $this->assertEquals(2, $r->getColumn());
     }
 
-    /**
-     * @dataProvider getEqualityTests
-     */
-    public function testEquals($r1, $r2, $expected)
+    #[DataProvider('getEqualityTests')]
+    public function testEquals($r1, $r2, $expected): void
     {
         $this->assertSame($expected, $r1->equals($r2));
         $this->assertSame($expected, $r2->equals($r1));
     }
 
-    public function getEqualityTests()
+    public static function getEqualityTests(): array
     {
         $tests = [];
 
@@ -105,29 +104,32 @@ class FileSourceTest extends TestCase
             false,
         ];
 
-        $source = $this->createMock(SourceInterface::class);
-        $source
-            ->expects($this->once())
-            ->method('equals')
-            ->willReturn(false);
         $tests[] = [
             new FileSource('foo'),
-            $source,
+            new class implements SourceInterface {
+                public function equals(SourceInterface $source): bool
+                {
+                    return false;
+                }
+
+                public function __toString(): string
+                {
+                    return '';
+                }
+            },
             false,
         ];
 
         return $tests;
     }
 
-    /**
-     * @dataProvider getToStringTests
-     */
-    public function testToString($r, $expected)
+    #[DataProvider('getToStringTests')]
+    public function testToString(FileSource $r, string $expected): void
     {
         $this->assertEquals($expected, (string) $r);
     }
 
-    public function getToStringTests()
+    public static function getToStringTests(): array
     {
         $tests = [];
 

@@ -25,9 +25,9 @@ use JMS\TranslationBundle\Model\Message;
 use JMS\TranslationBundle\Model\MessageCatalogue;
 use JMS\TranslationBundle\Translation\Dumper\PhpDumper;
 
-class PhpDumperTest extends BaseDumperTest
+class PhpDumperTest extends DumperTestCase
 {
-    public function testDumpStructureWithoutPrettyPrint()
+    public function testDumpStructureWithoutPrettyPrint(): void
     {
         $catalogue = new MessageCatalogue();
         $catalogue->setLocale('fr');

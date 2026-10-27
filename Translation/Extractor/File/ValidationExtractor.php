@@ -26,9 +26,9 @@ use JMS\TranslationBundle\Translation\Extractor\FileVisitorInterface;
 use PhpParser\Node;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor;
-use Symfony\Component\Validator\Mapping\ClassMetadataFactoryInterface;
+use Symfony\Component\Validator\Mapping\ClassMetadataInterface;
 use Symfony\Component\Validator\Mapping\Factory\MetadataFactoryInterface;
-use Symfony\Component\Validator\MetadataFactoryInterface as LegacyMetadataFactoryInterface;
+use Symfony\Component\Validator\Mapping\MetadataInterface;
 use Twig\Node\Node as TwigNode;
 
 /**
@@ -38,37 +38,23 @@ use Twig\Node\Node as TwigNode;
  */
 class ValidationExtractor implements FileVisitorInterface, NodeVisitor
 {
-    /**
-     * @var ClassMetadataFactoryInterface|MetadataFactoryInterface|LegacyMetadataFactoryInterface
-     */
-    private $metadataFactory;
+    private MetadataFactoryInterface $metadataFactory;
 
-    /**
-     * @var NodeTraverser
-     */
-    private $traverser;
+    private NodeTraverser $traverser;
 
     /**
      * @var MessageCatalogue
      */
     private $catalogue;
 
-    /**
-     * @var string
-     */
-    private $namespace = '';
+    private string $namespace = '';
 
     public function __construct($metadataFactory)
     {
-        if (
-            ! (
-            $metadataFactory instanceof MetadataFactoryInterface
-            || $metadataFactory instanceof LegacyMetadataFactoryInterface
-            || $metadataFactory instanceof ClassMetadataFactoryInterface
-            )
-        ) {
+        if (!$metadataFactory instanceof MetadataFactoryInterface) {
             throw new \InvalidArgumentException(sprintf('%s expects an instance of MetadataFactoryInterface or ClassMetadataFactoryInterface', static::class));
         }
+
         $this->metadataFactory = $metadataFactory;
 
         $this->traverser = new NodeTraverser();
@@ -100,17 +86,13 @@ class ValidationExtractor implements FileVisitorInterface, NodeVisitor
             return;
         }
 
-        $metadata = $this->metadataFactory instanceof ClassMetadataFactoryInterface ? $this->metadataFactory->getClassMetadata($name) : $this->metadataFactory->getMetadataFor($name);
-        if (!$metadata->hasConstraints() && !count($metadata->getConstrainedProperties())) {
+        $metadata = $this->metadataFactory->getMetadataFor($name);
+        if (!$metadata->getConstraints() && !$metadata->getConstrainedProperties()) {
             return;
         }
 
-        $this->extractFromConstraints($metadata->constraints);
-        foreach ($metadata->members as $members) {
-            foreach ($members as $member) {
-                $this->extractFromConstraints($member->constraints);
-            }
-        }
+        $this->extractFromConstraints($metadata->getConstraints());
+        $this->extractFromClassMetadata($metadata);
     }
 
     /**
@@ -191,6 +173,21 @@ class ValidationExtractor implements FileVisitorInterface, NodeVisitor
                         }
                     }
                 }
+            }
+        }
+    }
+
+    private function extractFromClassMetadata(MetadataInterface $metadata): void
+    {
+        if (!$metadata instanceof ClassMetadataInterface) {
+            return;
+        }
+
+        foreach ($metadata->getConstrainedProperties() as $property) {
+            $memberMetadata = $metadata->getPropertyMetadata($property);
+            foreach ($memberMetadata as $innerMetadata) {
+                $constraints = $innerMetadata->getConstraints();
+                $this->extractFromConstraints($constraints);
             }
         }
     }

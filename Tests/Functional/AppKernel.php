@@ -32,9 +32,9 @@ use Symfony\Component\HttpKernel\Kernel;
 
 class AppKernel extends Kernel
 {
-    private $config;
+    private string|null $config;
 
-    private $fwConfig;
+    private string $fwConfig;
 
     public function __construct(string $fwConfig, ?string $config)
     {
@@ -60,21 +60,28 @@ class AppKernel extends Kernel
 
     public function registerBundles(): iterable
     {
-        return [
+        $bundles = [
             new TestBundle(),
             new FrameworkBundle(),
             new TwigBundle(),
             new JMSTranslationBundle(),
-            new SensioFrameworkExtraBundle(),
         ];
+
+        if (class_exists(SensioFrameworkExtraBundle::class)) {
+            $bundles[] = new SensioFrameworkExtraBundle();
+        }
+
+        return $bundles;
     }
 
-    public function registerContainerConfiguration(LoaderInterface $loader)
+    public function registerContainerConfiguration(LoaderInterface $loader): void
     {
         $loader->load($this->fwConfig);
         if ($this->config) {
             $loader->load($this->config);
         }
+
+        $loader->load($this->getProjectDir() . '/config/services.yaml');
     }
 
     public function getCacheDir(): string
